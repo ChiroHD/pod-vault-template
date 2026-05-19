@@ -1,0 +1,10 @@
+{
+  "accentColor": "{{POD_ACCENT_COLOR}}",
+  "cssTheme": "Minimal",
+  "baseFontSize": 16,
+  "enabledCssSnippets": [
+    "pod-identity",
+    "terminal-bladerunner"
+  ],
+  "theme": "moonstone"
+}

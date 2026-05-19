@@ -1,0 +1,22 @@
+/* Pod Vault {{POD_NAME}} — {{POD_THEME_NAME}} dark terminal styling
+ * Derived from pod-identity.css ({{POD_ACCENT_COLOR}} brand family) but tuned for
+ * dark-mode terminal use. Matches the surrounding leaf background to the
+ * terminal background and hides the view header strip on terminal panes.
+ */
+
+.workspace-leaf-content[data-type^="terminal:"],
+.workspace-leaf-content[data-type^="terminal:"] .view-content {
+    background-color: {{POD_TERMINAL_BG}} !important;
+    padding: 0 !important;
+}
+
+.workspace-leaf-content[data-type^="terminal:"] .xterm,
+.workspace-leaf-content[data-type^="terminal:"] .xterm-viewport,
+.workspace-leaf-content[data-type^="terminal:"] .xterm-screen,
+.workspace-leaf-content[data-type^="terminal:"] .terminal-view {
+    background-color: {{POD_TERMINAL_BG}} !important;
+}
+
+.workspace-leaf-content[data-type^="terminal:"] .view-header {
+    display: none !important;
+}

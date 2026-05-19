@@ -1,0 +1,113 @@
+{
+  "_description": "Color palette catalog used by the pod-vault-setup skill. Each palette defines the five accent variables consumed by pod-identity.css + terminal-bladerunner.css. The setup skill presents these to the user, filters out ones already taken by sibling vaults, and substitutes the chosen palette's values into the CSS snippets + appearance.json.",
+  "palettes": {
+    "lavender": {
+      "name": "Lavender",
+      "description": "Soft purple — used by pod-vault-pj",
+      "accent": "#9b8ec4",
+      "accent_light": "#c4b8e0",
+      "accent_subtle": "#e8e2f3",
+      "accent_dark": "#6b5b95",
+      "terminal_bg": "#1A1330"
+    },
+    "forest": {
+      "name": "Forest",
+      "description": "Deep green — used by pod-vault-jm",
+      "accent": "#5f8c6e",
+      "accent_light": "#93b89e",
+      "accent_subtle": "#e0ede4",
+      "accent_dark": "#3d6b4f",
+      "terminal_bg": "#0F1B14"
+    },
+    "crimson": {
+      "name": "Crimson",
+      "description": "Deep red — bold + warm",
+      "accent": "#b04848",
+      "accent_light": "#d68a8a",
+      "accent_subtle": "#f5e0e0",
+      "accent_dark": "#7d2e2e",
+      "terminal_bg": "#1F0C0C"
+    },
+    "ocean": {
+      "name": "Ocean",
+      "description": "Deep blue — calm + technical",
+      "accent": "#4a7d99",
+      "accent_light": "#7fa9c0",
+      "accent_subtle": "#d8e8f0",
+      "accent_dark": "#2d5670",
+      "terminal_bg": "#0A1822"
+    },
+    "amber": {
+      "name": "Amber",
+      "description": "Warm gold — energetic",
+      "accent": "#c89849",
+      "accent_light": "#e0b87a",
+      "accent_subtle": "#f5e9d0",
+      "accent_dark": "#8a6520",
+      "terminal_bg": "#1F1608"
+    },
+    "slate": {
+      "name": "Slate",
+      "description": "Cool gray-blue — restrained + professional",
+      "accent": "#6b7a8a",
+      "accent_light": "#9aa6b3",
+      "accent_subtle": "#dde2e8",
+      "accent_dark": "#475260",
+      "terminal_bg": "#11141A"
+    },
+    "plum": {
+      "name": "Plum",
+      "description": "Deep purple — rich + saturated",
+      "accent": "#8a4d7a",
+      "accent_light": "#b682a8",
+      "accent_subtle": "#ecdde6",
+      "accent_dark": "#5a2f50",
+      "terminal_bg": "#1A0E18"
+    },
+    "teal": {
+      "name": "Teal",
+      "description": "Blue-green — fresh + crisp",
+      "accent": "#3d8a8a",
+      "accent_light": "#7ab2b2",
+      "accent_subtle": "#d4e8e8",
+      "accent_dark": "#205c5c",
+      "terminal_bg": "#0A1818"
+    },
+    "rust": {
+      "name": "Rust",
+      "description": "Burnt orange — grounded + earthy",
+      "accent": "#b86a3e",
+      "accent_light": "#d99a78",
+      "accent_subtle": "#f3e0d2",
+      "accent_dark": "#7d3e1c",
+      "terminal_bg": "#1F0E07"
+    },
+    "indigo": {
+      "name": "Indigo",
+      "description": "Deep blue-purple — focused + serious",
+      "accent": "#5d5a99",
+      "accent_light": "#8e8cba",
+      "accent_subtle": "#dcdae5",
+      "accent_dark": "#3d3a70",
+      "terminal_bg": "#0E0E1F"
+    },
+    "moss": {
+      "name": "Moss",
+      "description": "Muted olive-green — soft + natural",
+      "accent": "#7a8a5a",
+      "accent_light": "#a5b289",
+      "accent_subtle": "#e3e8d6",
+      "accent_dark": "#535e3a",
+      "terminal_bg": "#161A0E"
+    },
+    "rose": {
+      "name": "Rose",
+      "description": "Dusty pink — warm + gentle",
+      "accent": "#c47d8e",
+      "accent_light": "#dba6b3",
+      "accent_subtle": "#f3e2e7",
+      "accent_dark": "#8e4d5f",
+      "terminal_bg": "#1F0E14"
+    }
+  }
+}

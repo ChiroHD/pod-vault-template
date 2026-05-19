@@ -1,0 +1,68 @@
+/* Pod Vault {{POD_NAME}} — {{POD_THEME_NAME}} identity */
+
+:root {
+  --pod-accent: {{POD_ACCENT_COLOR}};
+  --pod-accent-light: {{POD_ACCENT_LIGHT}};
+  --pod-accent-subtle: {{POD_ACCENT_SUBTLE}};
+  --pod-accent-dark: {{POD_ACCENT_DARK}};
+  --pod-accent-text: #ffffff;
+}
+
+/* Titlebar / top area */
+.titlebar,
+.titlebar-inner,
+.titlebar-button-container.mod-left,
+.titlebar-button-container.mod-right {
+  background-color: var(--pod-accent) !important;
+}
+
+.titlebar-text,
+.titlebar-button,
+.titlebar .clickable-icon,
+.sidebar-toggle-button.mod-right {
+  color: var(--pod-accent-text) !important;
+}
+
+/* Left sidebar ribbon */
+.workspace-ribbon.mod-left {
+  background-color: var(--pod-accent-dark) !important;
+}
+
+.workspace-ribbon.mod-left .clickable-icon {
+  color: var(--pod-accent-light) !important;
+}
+
+.workspace-ribbon.mod-left .clickable-icon:hover {
+  color: var(--pod-accent-text) !important;
+}
+
+/* Tab header bar */
+.workspace-tab-header-container {
+  background-color: var(--pod-accent-subtle) !important;
+}
+
+/* Active tab accent */
+.workspace-tab-header.is-active {
+  border-bottom: 2px solid var(--pod-accent) !important;
+}
+
+/* Accent color for links, checkboxes, toggles */
+.theme-light, .theme-dark {
+  --interactive-accent: var(--pod-accent) !important;
+  --interactive-accent-hover: var(--pod-accent-dark) !important;
+}
+
+/* Vault name in sidebar */
+.nav-header .vault-name {
+  color: var(--pod-accent-dark) !important;
+  font-weight: 600;
+}
+
+/* Scrollbar accent */
+::-webkit-scrollbar-thumb {
+  background-color: var(--pod-accent-light) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--pod-accent) !important;
+}
