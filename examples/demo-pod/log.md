@@ -79,7 +79,7 @@ description: Append-only pod timeline for the Atlas pod. Most recent entries at 
 ## 2026-04-20
 
 - Riley + Sam + Dr. C: **Delivery mechanism workshop.** Email-first for V1; SMS deferred. Dr. C joined late and aligned with the pod's lean. PDF library question opened for Sam's 4/21 spike. See [[2026-04-20 Delivery Mechanism Workshop]].
-- Riley: **Updated jira-stories.md** — added STMT-201 (SMS delivery) to the Post-V1 backlog.
+- Riley: **Updated engineering-stories.md** — added STMT-201 (SMS delivery) to the Post-V1 backlog.
 
 ## 2026-04-17
 

@@ -42,11 +42,11 @@ git push
 
 | Layer | Tool | What Goes There |
 |-------|------|-----------------|
-| Roadmap | Monday | Milestone status for Dr. C |
-| Engineering | JIRA ({{JIRA_EPIC}}) | Stories {{ENGINEER_NAME}} builds, tests, closes |
+| Roadmap | Monday | Milestone status for Dr. C / SKED leadership |
+| Engineering | {{TICKET_SYSTEM}} ({{EPIC_REF}}) | Stories {{ENGINEER_NAME}} builds, tests, closes — JIRA for ChiroHD pods, GitLab Issues for SKED pods, both for split-tracked pods |
 | Pod coordination | This vault | Plan, decisions, PM tasks, "who's doing what" |
 
-**Rule of thumb:** If {{ENGINEER_NAME}} writes code for it, it's a JIRA story. Everything else lives here.
+**Rule of thumb:** If {{ENGINEER_NAME}} writes code for it, it's an engineering ticket in `{{TICKET_SYSTEM}}`. Everything else lives here.
 
 ---
 
@@ -154,10 +154,11 @@ Catches drift the per-ingest enforcement misses — stale index counts, frozen w
 
 | Resource | Location |
 |----------|----------|
-| JIRA Epic | {{JIRA_EPIC_URL}} |
+| Engineering Epic ({{TICKET_SYSTEM}}) | {{EPIC_URL}} |
 | Monday Roadmap | {{MONDAY_ROADMAP_REFERENCE}} |
 | Problem Brief (Notion) | {{NOTION_PROBLEM_BRIEF_URL}} |
 | Slack Channel | {{SLACK_CHANNEL}} |
+| Sibling Code Repo | {{ENGINEER_CODE_REPO}} |
 
 ---
 

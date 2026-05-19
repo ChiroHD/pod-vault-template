@@ -41,7 +41,7 @@ Dr. C joined the back end of the workshop. Her position: "Ship email first. SMS 
 
 - Send-from-profile modal ([STMT-106](https://example.atlassian.net/browse/STMT-106)) ships with a delivery-method dropdown that has only "Email" enabled. SMS is greyed out with a tooltip: "Coming soon."
 - The modal's data flow is shaped so adding SMS later requires adding an option, not rebuilding the workflow.
-- STMT-201 lands in the Post-V1 backlog ([[jira-stories]]) — SMS delivery for statements, owned by a future pod or this one's continuation.
+- STMT-201 lands in the Post-V1 backlog ([[engineering-stories]]) — SMS delivery for statements, owned by a future pod or this one's continuation.
 - Beta kit and broad-release announcement explicitly mention email-only — set expectations rather than apologize later.
 - Maya's support team won't need to handle SMS-specific issues during beta. Reduces variable surface.
 

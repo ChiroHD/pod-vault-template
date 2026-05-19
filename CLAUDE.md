@@ -16,7 +16,7 @@ Shared knowledge vault for the **{{POD_NAME}} pod** at Adio, working on **{{PROJ
 | Artifact | Link |
 |----------|------|
 | Problem Brief (Notion) | {{NOTION_PROBLEM_BRIEF_URL}} |
-| JIRA Epic | {{JIRA_EPIC_URL}} |
+| Engineering Epic ({{TICKET_SYSTEM}}) | {{EPIC_URL}} |
 | Monday Roadmap | {{MONDAY_ROADMAP_REFERENCE}} |
 | Slack Channel | {{SLACK_CHANNEL}} |
 
@@ -127,12 +127,14 @@ Mechanical fixes (counts, dates, regrouping) apply automatically. Judgment calls
 Pod tasks live in `projects/<project>/tasks/tasks.md`. Format:
 
 ```markdown
-| Task | Owner | Status | Due | JIRA/Monday |
-|------|-------|--------|-----|-------------|
-| Example task | {{PM_NAME}} | In Progress | YYYY-MM-DD | [CHD-XXXX](url) |
+| Task | Owner | Status | Due | Ticket / Monday |
+|------|-------|--------|-----|------------------|
+| Example task | {{PM_NAME}} | In Progress | YYYY-MM-DD | [{{EPIC_REF}}-XX]({{EPIC_URL}}) |
 ```
 
-Monday and JIRA are for company-level tracking. This vault is for pod-level coordination.
+Engineering tickets live in `{{TICKET_SYSTEM}}` ({{EPIC_URL}}). Monday tracks company-level roadmap. This vault is for pod-level coordination — anything that isn't a discrete engineering ticket or a roadmap-level rollup.
+
+For SKED pods using `jira+gitlab` (split tracking), it's fine to reference either system in the Ticket column — the URL itself disambiguates.
 
 ## Daily Rhythm
 

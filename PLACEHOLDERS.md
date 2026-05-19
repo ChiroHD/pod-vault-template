@@ -19,13 +19,17 @@ This template uses `{{PLACEHOLDER}}` tokens throughout its files. The `pod-vault
 | `{{PRODUCT_LINE}}` | Which Adio product the pod works on | `ChiroHD`, `SKED` | README, CLAUDE, SETUP |
 | `{{PROJECT_NAME}}` | Human-readable project name | `TRP Vital Signs Export`, `PayFac Recurring Billing` | README, CLAUDE, project-brief |
 | `{{PROJECT_SLUG}}` | Kebab-case project slug for directory names | `trp-export`, `payfac-recurring-billing` | project paths, ingest skill, frontmatter |
-| `{{PROJECT_KEYWORD}}` | Short keyword for scanning content | `TRP`, `PayFac` | ingest skill (cross-vault content matching) |
+| `{{PROJECT_KEYWORD}}` | Short keyword for scanning content | `TRP`, `PayFac`, `Alina`, `Drip` | ingest skill (cross-vault content matching) |
 | `{{PM_NAME}}` | Product manager's first name | `Jeff`, `Riley` | CLAUDE, meeting note templates, memory templates |
-| `{{ENGINEER_NAME}}` | Lead engineer's first name | `Patrick`, `Matt`, `Sam` | CLAUDE, meeting note templates, memory templates |
+| `{{ENGINEER_NAME}}` | Lead engineer's first name | `Patrick`, `Matt`, `Sam`, `Eshin` | CLAUDE, meeting note templates, memory templates |
 | `{{CREATED_DATE}}` | Date the vault was set up | `2026-05-14` | README footer, TEMPLATE_VERSION |
-| `{{SESSION_CADENCE}}` | How often the pod meets | `Mon/Wed/Fri 09:30 ET`, `Tue/Thu mornings` | CLAUDE, project-brief |
-| `{{SLACK_CHANNEL}}` | Pod's Slack channel | `#trp-vitalsigns`, `#payfac-recurring` | CHEATSHEET, ingest skill |
-| `{{MONDAY_BOARD_URL}}` | Pod's Monday/JIRA board | full URL or "n/a" | CHEATSHEET |
+| `{{SESSION_CADENCE}}` | How often the pod meets | `Mon/Wed/Fri 09:30 ET`, `continuous / async` (SKED default) | CLAUDE, project-brief |
+| `{{SLACK_CHANNEL}}` | Pod's Slack channel | `#trp-vitalsigns`, `#alina-pod`, `#dripcampaigns` | CHEATSHEET, ingest skill |
+| `{{MONDAY_BOARD_URL}}` | Pod's Monday roadmap board | full URL or "n/a" | CHEATSHEET |
+| `{{TICKET_SYSTEM}}` | Engineering ticket system | `jira` (ChiroHD default), `gitlab` (SKED default), `jira+gitlab` (split pods like Alina) | engineering-stories.md frontmatter, ingest skill lifecycle rule, CHEATSHEET |
+| `{{EPIC_REF}}` | Epic identifier in the ticket system | `CHD-8366`, `STMT-100`, `&42` (GitLab epic ref) | engineering-stories.md, project-brief |
+| `{{EPIC_URL}}` | Full URL to the epic | `https://chirohd.atlassian.net/browse/CHD-8366`, `https://gitlab.com/sked/alina/-/epics/42` | engineering-stories.md, project-brief, README, Notion registry |
+| `{{ENGINEER_CODE_REPO}}` | URL to the sibling code repo | GitHub or GitLab URL — `https://github.com/...` (ChiroHD), `https://gitlab.com/sked/...` (SKED) | CLAUDE Sibling Repos table |
 | `{{POD_THEME_NAME}}` | Theme palette name | `Lavender`, `Forest`, `Crimson` | CSS snippet comments |
 | `{{POD_ACCENT_COLOR}}` | Primary hex color | `#9b8ec4` | `.obsidian/snippets/pod-identity.css`, `appearance.json` |
 | `{{POD_ACCENT_LIGHT}}` | Lighter accent variant | `#c2b8de` | pod-identity.css |

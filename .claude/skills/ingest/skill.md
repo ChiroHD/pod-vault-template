@@ -1,6 +1,6 @@
 ---
 name: ingest
-description: Ingest raw content into the pod vault — auto-files, adds frontmatter, extracts decisions, reconciles all living artifacts from dynamic registry (tasks, people, decisions, plan, project-brief, jira-stories + auto-discovered types), updates wiki and log. JIRA-published stories create update tasks instead of editing vault copy. Self-improves by auto-registering new living artifacts. Also supports cross-vault ingestion.
+description: Ingest raw content into the pod vault — auto-files, adds frontmatter, extracts decisions, reconciles all living artifacts from dynamic registry (tasks, people, decisions, plan, project-brief, engineering-stories + auto-discovered types), updates wiki and log. Published external tickets (JIRA or GitLab) create update tasks instead of editing the vault copy. Self-improves by auto-registering new living artifacts. Also supports cross-vault ingestion.
 ---
 
 # Ingest Skill
@@ -150,7 +150,7 @@ This is the critical cross-artifact sweep. Before updating the wiki, read every 
 
 1. **Read the registry:** Load `.claude/skills/ingest/living-artifacts.md` — this is the single source of truth for what gets reconciled. Do NOT use a hardcoded list.
 2. **For each registered artifact type:** read the file(s) matching the path pattern, then apply the reconciliation rules defined in the registry entry.
-3. **JIRA lifecycle check:** For `jira-stories.md` specifically, the registry defines a lifecycle rule — check whether each story has a JIRA ticket number before editing. If it does, JIRA is the source of truth: create a task in tasks.md describing what needs updating rather than editing the vault copy. Pre-JIRA stories (no ticket number) can be edited directly.
+3. **Ticket-system lifecycle check:** For `engineering-stories.md` specifically (legacy: `jira-stories.md`), the registry defines a lifecycle rule. Read the file's `ticket_system:` frontmatter (`jira`, `gitlab`, or `jira+gitlab`), then check whether each story has a ticket reference in that system before editing. If it does, the external system is the source of truth: create a task in tasks.md describing what needs updating rather than editing the vault copy. Pre-creation drafts (no external ticket) can be edited directly.
 
 **General reconciliation guidance:**
 - Read each living artifact file before modifying it

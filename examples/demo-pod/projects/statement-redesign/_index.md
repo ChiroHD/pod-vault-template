@@ -12,7 +12,7 @@ updated: 2026-05-15
 |------|---------|
 | [project-brief.md](project-brief.md) | Problem statement, scope, technical context |
 | [plan.md](plan.md) | Build plan — phases, timeline, releases |
-| [jira-stories.md](jira-stories.md) | JIRA stories cross-ref + Post-V1 backlog |
+| [engineering-stories.md](engineering-stories.md) | Engineering stories cross-ref (JIRA-backed) + Post-V1 backlog |
 | [tasks/tasks.md](tasks/tasks.md) | Active pod task board |
 | [notes/Statement Glossary.md](notes/Statement Glossary.md) | Standing reference — terms specific to the statement domain |
 | [notes/Validation Plan.md](notes/Validation Plan.md) | Pre-beta validation checklist + beta kit drafts |

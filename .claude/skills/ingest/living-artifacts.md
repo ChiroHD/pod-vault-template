@@ -50,17 +50,22 @@ Each entry defines a living artifact type that must be read and reconciled on ev
   - Timeline table updates
   - Stakeholder or scope changes
 
-### 6. JIRA Stories
-- **Path pattern:** `projects/<project>/jira-stories.md`
+### 6. Engineering Stories
+- **Path pattern:** `projects/<project>/engineering-stories.md` (legacy: `jira-stories.md`)
 - **What to reconcile:**
   - Story descriptions, acceptance criteria, context links
   - Unblocked stories — remove or update "Blocked by" notes
   - Stale Pod Vault Context links (decision superseded)
-- **JIRA lifecycle rule:** Before editing any story, check if it has a JIRA ticket number (e.g., `CHD-XXXX` in its header or `jira_ticket:` field). If yes:
-  - **Do NOT edit the vault copy** — JIRA is now the source of truth and editing the vault creates divergence
-  - Instead, create a task in tasks.md: "Update JIRA story CHD-XXXX: [describe what changed]"
-  - Include enough detail in the task that Jeff or the engineer can make the JIRA update
-  - Stories without a JIRA ticket number are pre-JIRA (vault is source of truth) — edit them directly
+- **Ticket-system lifecycle rule:** Read the `ticket_system:` field in the file's frontmatter (values: `jira`, `gitlab`, `jira+gitlab`). The rule is the same for either system — the external ticket is the source of truth once it exists; the vault copy is a navigation aid that must not be silently edited into divergence.
+  - **Before editing any story:** check if it has a ticket reference in the external system
+    - JIRA: pattern like `CHD-XXXX` / `STMT-XXX` / `<KEY>-<NUM>` in the story header or a `jira_ticket:` field
+    - GitLab: pattern like `<group>/<project>#NNNN` or a `gitlab_issue:` field, or an `&NN` epic reference
+    - Split (`jira+gitlab`): check both — the project decides which system holds source of truth; usually one engineer's primary system. If unclear, treat as if both exist and surface a task to clarify.
+  - **If the story has an external ticket:**
+    - Do NOT edit the vault copy — the external ticket is the source of truth and editing the vault creates divergence
+    - Instead, create a task in tasks.md: `Update <SYSTEM> ticket <REF>: [describe what changed]` (e.g., `Update JIRA story CHD-8366: scope reduced per [[2026-05-19 Decision]]` or `Update GitLab issue sked/alina#142: ACs revised per [[meeting]]`)
+    - Include enough detail in the task that the PM or engineer can apply the external update
+  - **If the story has no external ticket** (pre-creation drafts): vault is source of truth — edit directly
 
 <!--
 Entries 1-6 above are the universal living artifacts present in every pod vault.

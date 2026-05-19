@@ -6,7 +6,7 @@ updated: 2026-05-15
 
 # Statement Redesign — Pod Tasks
 
-Daily coordination tasks. Engineering work lives in JIRA (STMT-100). See `plan.md` for the full project plan and [[jira-stories]] for the JIRA cross-reference.
+Daily coordination tasks. Engineering work lives in JIRA (STMT-100). See `plan.md` for the full project plan and [[engineering-stories]] for the ticket cross-reference.
 
 ## This Week — Pre-Beta Validation (Mon 5/11 → Fri 5/15)
 

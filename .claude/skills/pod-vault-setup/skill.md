@@ -95,49 +95,75 @@ Record as:
 
 ```
 Q4a: Project name (display version)?
-     Example: "TRP Vital Signs Export", "PayFac Recurring Billing"
+     Example: "TRP Vital Signs Export", "PayFac Recurring Billing", "Alina Scheduling Assistant"
 
 Q4b: Project slug (URL-safe, lowercase, hyphenated)?
-     Example: "trp-export", "payfac-recurring-billing"
+     Example: "trp-export", "payfac-recurring-billing", "alina"
 
-Q4c: JIRA epic? (or "none" if not created yet)
-     Example: CHD-8366
+Q4c: Ticket system?
+     1. JIRA (ChiroHD default)
+     2. GitLab Issues (SKED default)
+     3. Both — split tracked (e.g., Alina pod where one engineer uses JIRA personally,
+        team mirrors to GitLab Issues)
 
-Q4d: Notion problem brief URL? (optional)
+     Auto-select based on {{PRODUCT_LINE}} if user just presses enter:
+       ChiroHD → 1, SKED → 2
 
-Q4e: Project keyword for cross-vault content discovery?
+Q4d: Epic reference and URL?
+     For JIRA: epic key (e.g., CHD-8366) and JIRA URL
+     For GitLab: epic ref (e.g., sked/alina&42) and GitLab URL
+     For Both: capture the JIRA epic key + URL first, then optionally a GitLab milestone/epic URL
+     (Or "none" if epic isn't created yet — pod can fill in later)
+
+Q4e: Notion problem brief URL? (optional — also covers SKED's Notion "Builds" workspace docs)
+
+Q4f: Project keyword for cross-vault content discovery?
      This is used by `/ingest --from-vault` to find project content in the PM's
-     personal vault. Example: "TRP" or "PayFac".
+     personal vault. Example: "TRP", "PayFac", "Alina", "Drip".
 
-Q4f: Target completion date (or "TBD")?
+Q4g: Target completion date (or "TBD")?
 
-Q4g: Project advisor? (default: Dr. Cristina Esposito for ChiroHD pods)
+Q4h: Project advisor? (default: Dr. Cristina Esposito for ChiroHD pods;
+     for SKED pods, ask — typically the departing/handoff PM or a SKED-side lead)
 ```
 
-Record as `{{PROJECT_NAME}}`, `{{PROJECT_SLUG}}`, `{{JIRA_EPIC}}`, `{{JIRA_EPIC_URL}}`, `{{NOTION_PROBLEM_BRIEF_URL}}`, `{{PROJECT_KEYWORD}}`, `{{PROJECT_TARGET_DATE}}`, `{{ADVISOR_NAME}}`, `{{ADVISOR_ROLE}}`.
+Record as `{{PROJECT_NAME}}`, `{{PROJECT_SLUG}}`, `{{TICKET_SYSTEM}}`, `{{EPIC_REF}}`, `{{EPIC_URL}}`, `{{NOTION_PROBLEM_BRIEF_URL}}`, `{{PROJECT_KEYWORD}}`, `{{PROJECT_TARGET_DATE}}`, `{{ADVISOR_NAME}}`, `{{ADVISOR_ROLE}}`.
 
 ### Step 6: Pod session cadence
 
 ```
-Q5: Pod session days?
+Q5: Pod session cadence?
 
-  1. Mon/Wed mornings (PJ pod's cadence)
-  2. Tue/Thu mornings (JM pod's cadence)
-  3. Other (specify)
+  1. Mon/Wed mornings, 8:30 AM – 12:30 PM ET (PJ pod's cadence — ChiroHD-style deep-work)
+  2. Tue/Thu mornings, 8:30 AM – 12:30 PM ET (JM pod's cadence — ChiroHD-style deep-work)
+  3. Continuous / async — no fixed session (typical SKED-side pattern; pods like Alina
+     ship continuously without a fixed pod-session ritual)
+  4. Other (specify days, times, or cadence in free-form text)
 
-Pick 1, 2, or 3.
+  Default suggestion based on {{PRODUCT_LINE}}: ChiroHD → 1 or 2, SKED → 3.
+  But ask — SKED pods can choose deep-work, and ChiroHD pods can run continuously.
 ```
 
-Record as `{{POD_SESSION_DAYS}}`, `{{POD_SESSION_TIME}}` (default "8:30 AM – 12:30 PM ET"), `{{POD_SESSION_DAY_1}}`, `{{POD_SESSION_DAY_2}}`.
+Record as `{{POD_SESSION_DAYS}}`, `{{POD_SESSION_TIME}}`, `{{POD_SESSION_DAY_1}}`, `{{POD_SESSION_DAY_2}}`. For "continuous/async" pick, set `{{POD_SESSION_DAYS}}` = `continuous`, `{{POD_SESSION_TIME}}` = `async`, and leave the per-day fields empty. The CLAUDE.md template handles both shapes.
 
-### Step 7: Slack channel + Monday board (optional)
+### Step 7: Slack channel + Monday board + code repo (optional)
 
 ```
-Q6: Slack channel name? (optional, e.g., "#trp-vitalsigns")
-Q7: Monday board reference? (optional, e.g., "Q2 2026 Roadmap — TRP item")
+Q6: Slack channel name? (optional)
+     ChiroHD examples: "#trp-vitalsigns", "#payfac-recurring"
+     SKED examples: "#alina-pod", "#dripcampaigns", "#product-sked"
+
+Q7: Monday board reference? (optional)
+     ChiroHD: "Q2 2026 Roadmap — TRP item"
+     SKED: "skedlife.monday.com/boards/<id>" — SKED uses its own Monday workspace
+
+Q7c: Sibling code repo URL? (optional — used in CLAUDE.md Sibling Repos table)
+     ChiroHD pods: a github.com/ChiroHD/... URL
+     SKED pods: a gitlab.com/sked/... URL
+     Skip if no code repo exists yet.
 ```
 
-Record as `{{SLACK_CHANNEL}}`, `{{MONDAY_ROADMAP_REFERENCE}}`.
+Record as `{{SLACK_CHANNEL}}`, `{{MONDAY_ROADMAP_REFERENCE}}`, `{{ENGINEER_CODE_REPO}}`.
 
 ### Step 8: Vault theming
 
@@ -191,8 +217,10 @@ Product line:       {{PRODUCT_LINE}}
 Pod name:           {{POD_NAME}}
 Pod members:        {{PM_NAME}}, {{ENGINEER_NAME}}
 First project:      {{PROJECT_NAME}} ({{PROJECT_SLUG}})
-JIRA epic:          {{JIRA_EPIC}}
-Pod session days:   {{POD_SESSION_DAYS}}
+Ticket system:      {{TICKET_SYSTEM}}
+Epic ref:           {{EPIC_REF}}
+Code repo:          {{ENGINEER_CODE_REPO}}
+Pod cadence:        {{POD_SESSION_DAYS}}
 Slack channel:      {{SLACK_CHANNEL}}
 Theming:            {{POD_THEME_NAME}} ({{POD_ACCENT_COLOR}})
 
@@ -222,41 +250,48 @@ When user confirms, execute in this order:
    - Generate the `MEMORY.md` index
 
 5. **Adio-aware product reference cleanup.**
-   - If product is ChiroHD: delete `shared/reference/sked/` entirely (the README there is template-only context that doesn't apply to a live ChiroHD pod)
-   - If product is SKED: keep `shared/reference/sked/README.md` (the TBD note is the right starting state) and delete `shared/reference/chirohd/` (the new pod will reference ChiroHD content via cross-vault lookup if needed, not by carrying a full copy)
+   - If product is ChiroHD: delete `shared/reference/sked/` entirely (SKED reference content doesn't apply to a ChiroHD pod and would just be noise on the wikilink graph)
+   - If product is SKED: keep the entire `shared/reference/sked/` tree (README + Tooling Map + Stakeholder Map + Process Notes + Glossary — the seed orientation a SKED pod needs on day one) and delete `shared/reference/chirohd/` (the new pod will reference ChiroHD content via cross-vault lookup if needed, not by carrying a full copy)
 
-6. **Remove template-only files.** These exist for template contributors and shouldn't ship in a live pod:
+6. **Adio-aware people-notes curation.** The template seeds `shared/people/` with five Adio-wide profiles. Some apply to both product lines; some are ChiroHD-only.
+   - **Always keep** (Adio-level execs, both product lines): `Cristina Esposito.md`, `Gabe Doty.md`, `Luke Doty.md`
+   - **ChiroHD only**: `Ryan Caskey.md` (Head Developer, ChiroHD eng), `Ryan Oakes.md` (VP Payments, ChiroHD PayFac) — delete these if `{{PRODUCT_LINE}}` is SKED
+   - **SKED-specific seed profiles** (only relevant if `{{PRODUCT_LINE}}` is SKED — the SKED stakeholder profiles live in `shared/reference/sked/SKED Stakeholder Map.md` and don't need to be promoted to `shared/people/` until the pod has actual interaction history with them; leave that promotion to the first SKED pod's first overhaul)
+
+7. **Remove template-only files.** These exist for template contributors and shouldn't ship in a live pod:
    - Delete `PLACEHOLDERS.md` (catalog of `{{PLACEHOLDER}}` tokens — irrelevant once substitution has happened)
    - Delete `examples/demo-pod/` (worked example — the live pod doesn't need to carry the demo content; it's available in the template repo for reference)
 
-7. **Create the GitHub repo.**
+8. **Create the GitHub repo.** Per the architectural decision (2026-05-19), pod vaults of BOTH product lines live in the `ChiroHD/` GitHub org for now — even SKED pod vaults. (Code repos differ — SKED code is on GitLab — but the pod vault itself is always a GitHub repo under `ChiroHD/`.)
    ```bash
-   gh repo create ChiroHD/pod-vault-{{POD_SLUG}} --public --source=. --remote=origin --description "Pod vault for the {{POD_NAME}} pod working on {{PROJECT_NAME}}"
+   gh repo create ChiroHD/pod-vault-{{POD_SLUG}} --public --source=. --remote=origin --description "Pod vault for the {{POD_NAME}} pod working on {{PROJECT_NAME}} ({{PRODUCT_LINE}})"
    ```
    (Adjust public/private based on the user's preference if they ask; default to public matching siblings.)
 
-8. **Register pod in Notion registry.**
-   Use Notion MCP to append a row to the Pod Registry database (database ID stored in `.claude/skills/pod-vault-setup/notion-registry.md` after Phase 4 of the build). Row data:
+9. **Register pod in Notion registry.**
+   Use Notion MCP to append a row to the unified Pod Registry database (data source ID + URL in `.claude/skills/pod-vault-setup/notion-registry.md`). The same registry holds both ChiroHD and SKED pods; the `Product Line` column is the discriminator. Row data:
    - Pod Name: `{{POD_NAME}}`
-   - Product Line: `{{PRODUCT_LINE}}`
+   - Pod Slug: `{{POD_SLUG}}`
+   - Product Line: `{{PRODUCT_LINE}}` (must be exactly `ChiroHD` or `SKED`)
    - Primary Project: `{{PROJECT_NAME}}`
-   - Members: `{{PM_NAME}}, {{ENGINEER_NAME}}`
-   - JIRA Epic: `{{JIRA_EPIC_URL}}`
+   - Members: `{{PM_NAME}} (PM), {{ENGINEER_NAME}} (Engineer)`
    - GitHub Repo: `https://github.com/ChiroHD/pod-vault-{{POD_SLUG}}`
+   - JIRA Epic / GitLab Epic: `{{EPIC_URL}}` (works for either system — the URL itself tells you which)
    - Status: Active
    - Created: today
+   - Theme: `{{POD_THEME_NAME}}`
    - Template Commit: `{{TEMPLATE_COMMIT_HASH}}`
    
    If Notion MCP isn't available, surface the row data + the database URL so the user can paste manually.
 
-9. **Initial commit + push.**
-   ```bash
-   git add -A
-   git commit -m "Initial pod setup — {{POD_NAME}} pod, {{PROJECT_NAME}} project"
-   git push -u origin main
-   ```
+10. **Initial commit + push.**
+    ```bash
+    git add -A
+    git commit -m "Initial pod setup — {{POD_NAME}} pod, {{PROJECT_NAME}} project ({{PRODUCT_LINE}})"
+    git push -u origin main
+    ```
 
-10. **Self-archive.**
+11. **Self-archive.**
    - Move this skill from `.claude/skills/pod-vault-setup/` to `_setup_artifacts/skills/pod-vault-setup/`
    - Add a `_setup_artifacts/README.md` explaining "These are the setup-time files preserved for reference. The setup skill auto-archived itself here after first run."
    - The skill is no longer loadable from `.claude/skills/` — exactly what we want.

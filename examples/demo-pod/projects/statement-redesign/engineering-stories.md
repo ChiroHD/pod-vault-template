@@ -4,12 +4,15 @@ project: statement-redesign
 status: living
 created: 2026-04-07
 last_updated: 2026-05-15
-purpose: Brief mapping of pod work → JIRA stories. JIRA is the source of truth for status; this is a navigation aid.
+ticket_system: jira
+purpose: Brief mapping of pod work → engineering tickets. The ticket system is the source of truth for status; this is a navigation aid.
 ---
 
-# Patient Statements Redesign — JIRA Stories
+# Patient Statements Redesign — Engineering Stories
 
 > Brief reference. JIRA epic [STMT-100](https://example.atlassian.net/browse/STMT-100) is the source of truth for current status, acceptance criteria, and implementation details. This file is a fast cross-reference between pod-vault context and the JIRA stories.
+>
+> *(File framing is tool-neutral via the `ticket_system:` frontmatter field — set to `jira` here. SKED pods set it to `gitlab` or `jira+gitlab`; the ingest skill applies the appropriate lifecycle rule.)*
 
 ## Epic
 
