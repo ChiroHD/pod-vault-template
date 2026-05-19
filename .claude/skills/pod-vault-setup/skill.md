@@ -222,16 +222,20 @@ When user confirms, execute in this order:
    - Generate the `MEMORY.md` index
 
 5. **Adio-aware product reference cleanup.**
-   - If product is ChiroHD: delete `shared/reference/sked/` (or leave it as empty `.gitkeep` for future)
-   - If product is SKED: warn that SKED reference content is empty; leave the dir with a TBD note
+   - If product is ChiroHD: delete `shared/reference/sked/` entirely (the README there is template-only context that doesn't apply to a live ChiroHD pod)
+   - If product is SKED: keep `shared/reference/sked/README.md` (the TBD note is the right starting state) and delete `shared/reference/chirohd/` (the new pod will reference ChiroHD content via cross-vault lookup if needed, not by carrying a full copy)
 
-6. **Create the GitHub repo.**
+6. **Remove template-only files.** These exist for template contributors and shouldn't ship in a live pod:
+   - Delete `PLACEHOLDERS.md` (catalog of `{{PLACEHOLDER}}` tokens — irrelevant once substitution has happened)
+   - Delete `examples/demo-pod/` (worked example — the live pod doesn't need to carry the demo content; it's available in the template repo for reference)
+
+7. **Create the GitHub repo.**
    ```bash
    gh repo create ChiroHD/pod-vault-{{POD_SLUG}} --public --source=. --remote=origin --description "Pod vault for the {{POD_NAME}} pod working on {{PROJECT_NAME}}"
    ```
    (Adjust public/private based on the user's preference if they ask; default to public matching siblings.)
 
-7. **Register pod in Notion registry.**
+8. **Register pod in Notion registry.**
    Use Notion MCP to append a row to the Pod Registry database (database ID stored in `.claude/skills/pod-vault-setup/notion-registry.md` after Phase 4 of the build). Row data:
    - Pod Name: `{{POD_NAME}}`
    - Product Line: `{{PRODUCT_LINE}}`
@@ -245,14 +249,14 @@ When user confirms, execute in this order:
    
    If Notion MCP isn't available, surface the row data + the database URL so the user can paste manually.
 
-8. **Initial commit + push.**
+9. **Initial commit + push.**
    ```bash
    git add -A
    git commit -m "Initial pod setup — {{POD_NAME}} pod, {{PROJECT_NAME}} project"
    git push -u origin main
    ```
 
-9. **Self-archive.**
+10. **Self-archive.**
    - Move this skill from `.claude/skills/pod-vault-setup/` to `_setup_artifacts/skills/pod-vault-setup/`
    - Add a `_setup_artifacts/README.md` explaining "These are the setup-time files preserved for reference. The setup skill auto-archived itself here after first run."
    - The skill is no longer loadable from `.claude/skills/` — exactly what we want.
