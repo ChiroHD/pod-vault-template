@@ -262,13 +262,27 @@ When user confirms, execute in this order:
    - Delete `PLACEHOLDERS.md` (catalog of `{{PLACEHOLDER}}` tokens — irrelevant once substitution has happened)
    - Delete `examples/demo-pod/` (worked example — the live pod doesn't need to carry the demo content; it's available in the template repo for reference)
 
-8. **Create the GitHub repo.** Per the architectural decision (2026-05-19), pod vaults of BOTH product lines live in the `ChiroHD/` GitHub org for now — even SKED pod vaults. (Code repos differ — SKED code is on GitLab — but the pod vault itself is always a GitHub repo under `ChiroHD/`.)
+8. **Generate the public-facing README.** The template ships with a setup-focused `README.md` for first-run guidance. Once setup completes, replace it with a live-pod README so the GitHub repo page shows useful context to anyone who finds it.
+   - Read the live-pod template at `.claude/skills/pod-vault-setup/README-template.md`
+   - Substitute the placeholders below, then overwrite `/README.md` in the new pod vault
+   - Then delete `.claude/skills/pod-vault-setup/README-template.md` (no longer needed)
+
+   Placeholders to fill in (in addition to the standard ones already collected):
+   - `{{POD_ACCENT_COLOR_NOHASH}}` — `{{POD_ACCENT_COLOR}}` with the leading `#` stripped (shields.io URL format)
+   - `{{PROJECT_ONE_LINE_DESCRIPTION}}` — derive from the user's earlier project answers; if a Notion problem brief was provided, read its first paragraph; otherwise ask the user for a one-sentence description
+   - `{{SIBLING_PODS_LIST}}` — build a bulleted Markdown list by querying the Notion Pod Registry (data source `44fdeca6-f7f8-4b3c-b1f7-690f24e3f371`) for rows where `Status = Active` and `Pod Slug != {{POD_SLUG}}`. Format each row as:
+     ```
+     - **{{OTHER_POD_NAME}}:** [ChiroHD/pod-vault-{{OTHER_POD_SLUG}}](https://github.com/ChiroHD/pod-vault-{{OTHER_POD_SLUG}}) — {{OTHER_PROJECT_NAME}}
+     ```
+     If the registry query is unavailable, fall back to scanning `~/dev/chirohd/pod-vault-*/` for local sibling vaults and listing those.
+
+9. **Create the GitHub repo.** Per the architectural decision (2026-05-19), pod vaults of BOTH product lines live in the `ChiroHD/` GitHub org for now — even SKED pod vaults. (Code repos differ — SKED code is on GitLab — but the pod vault itself is always a GitHub repo under `ChiroHD/`.)
    ```bash
    gh repo create ChiroHD/pod-vault-{{POD_SLUG}} --public --source=. --remote=origin --description "Pod vault for the {{POD_NAME}} pod working on {{PROJECT_NAME}} ({{PRODUCT_LINE}})"
    ```
    (Adjust public/private based on the user's preference if they ask; default to public matching siblings.)
 
-9. **Register pod in Notion registry.**
+10. **Register pod in Notion registry.**
    Use Notion MCP to append a row to the unified Pod Registry database (data source ID + URL in `.claude/skills/pod-vault-setup/notion-registry.md`). The same registry holds both ChiroHD and SKED pods; the `Product Line` column is the discriminator. Row data:
    - Pod Name: `{{POD_NAME}}`
    - Pod Slug: `{{POD_SLUG}}`
@@ -284,14 +298,14 @@ When user confirms, execute in this order:
    
    If Notion MCP isn't available, surface the row data + the database URL so the user can paste manually.
 
-10. **Initial commit + push.**
+11. **Initial commit + push.**
     ```bash
     git add -A
     git commit -m "Initial pod setup — {{POD_NAME}} pod, {{PROJECT_NAME}} project ({{PRODUCT_LINE}})"
     git push -u origin main
     ```
 
-11. **Self-archive.**
+12. **Self-archive.**
    - Move this skill from `.claude/skills/pod-vault-setup/` to `_setup_artifacts/skills/pod-vault-setup/`
    - Add a `_setup_artifacts/README.md` explaining "These are the setup-time files preserved for reference. The setup skill auto-archived itself here after first run."
    - The skill is no longer loadable from `.claude/skills/` — exactly what we want.
