@@ -26,6 +26,7 @@ User says "run a vault overhaul", "audit the vault", "vault refresh", or runs `/
 - `--dry-run`: report findings only, don't make changes
 - `--section <name>`: run just one section (e.g., `--section indexes`, `--section wiki-lint`, `--section cross-vault`)
 - `--cross-vault-compare`: enable deep mode for Section 9 (full content diff against sibling vaults). Otherwise Section 9 only checks file-existence asymmetries.
+- `--update-template`: enable Section 10 (template backflow). Compares this vault and its siblings against `pod-vault-template`, identifies improvements that ≥2 active pods share but the template lacks, and offers to open PRs against the template repo. Off by default — only run when you want to propagate improvements upstream.
 
 ## The Overhaul Pipeline
 
@@ -193,8 +194,70 @@ Cross-Vault Comparison — comparing against <sibling-vault-name>
 
 **Brief mode output** (when `--cross-vault-compare` NOT set): just the file-existence asymmetry line. Example:
 ```
-Cross-vault brief: 2 sibling vaults found (pod-vault-jm). All structural files present in both. Run with --cross-vault-compare for deep analysis.
+Cross-vault brief: 1 sibling vault found ({{SIBLING_POD}}). All structural files present in both. Run with --cross-vault-compare for deep analysis.
 ```
+
+### Section 10: Template Backflow (only with `--update-template`)
+
+**Goal:** Improvements that prove themselves in 2+ active pod vaults should propagate back into `pod-vault-template`, so every new pod inherits them. This section finds those candidates and (with user approval) opens PRs against the template repo.
+
+**Why this exists:** Skills, memories, and how-to docs evolve in active pods as Claude learns from real work. Without backflow, the template grows stale and new pods start behind. The 2+ consensus rule is the trust threshold: a pattern is template-worthy once two independent pods have validated it through real use.
+
+**Behavior:** off by default. Runs only when `--update-template` is passed. Builds on Section 9's comparison data — auto-enable `--cross-vault-compare` if `--update-template` is set.
+
+**Procedure:**
+
+1. **Locate the template.** Expect `~/dev/chirohd/pod-vault-template`. If not present, clone via `gh repo clone ChiroHD/pod-vault-template ~/dev/chirohd/pod-vault-template`. Read `TEMPLATE_VERSION.md` to capture the current template commit; this scopes the comparison.
+2. **Compute a 3-way diff** for each structural file in the Section 9 comparison set (skills, CHEATSHEET, CLAUDE, SETUP, AGENTS, `shared/wiki/index.md` structure, and per-project memory files). For the template side, substitute placeholders before diffing — `{{PROJECT_SLUG}}` → this vault's project slug, `{{ENGINEER_NAME}}` → this vault's engineer name, etc. — so placeholder text doesn't look like a structural diff.
+3. **Apply the 2+ consensus rule** to each structural diff:
+   - Pattern present in **this vault AND ≥1 sibling pod**, absent from template → **high-confidence backflow candidate**
+   - Pattern present in **only this vault**, absent from siblings and template → **low-confidence candidate** (mark "needs validation in ≥1 more pod before backflow")
+   - Pattern present in **template only**, absent from all active pods → **possibly stale template content** (surface for user review — may be deprecated, or template may be ahead)
+4. **Re-templatize before PR.** When preparing a candidate for the template, reverse the placeholder substitution: replace this vault's project/people/path tokens with `{{PLACEHOLDER}}` form. The substitution table:
+
+   | This-vault token | Template placeholder |
+   |---|---|
+   | Project slug | `{{PROJECT_SLUG}}` |
+   | Project keyword | `{{PROJECT_KEYWORD}}` |
+   | Engineer first name | `{{ENGINEER_NAME}}` |
+   | PM first name | `{{PM_NAME}}` |
+   | Pod vault path | `pod-vault-{{POD_SLUG}}` |
+   | Specific JIRA epic | preserve as illustrative example with a comment, OR strip if not load-bearing |
+
+5. **Living-artifacts entries:** only backport universal entries (tasks, people, decisions, plan, project-brief, jira-stories, wiki). Project-specific entries stay local — do not push to template.
+6. **Open one PR per candidate** (small, reviewable diffs > one giant PR):
+   - Branch name: `backflow/<source-pod>-<short-slug>-YYYY-MM-DD`
+   - PR title: `[backflow from <source-pod>] <change summary>`
+   - PR body: source pods, what changed, the rationale (link to incident if applicable), and any re-templatization notes
+   - Use `gh pr create --base main --draft` so the user can review before marking ready
+7. **Prompt before each PR.** Don't open PRs unattended. For each high-confidence candidate, ask: "Open PR to template for `<file>`: `<change summary>`?" Single-pod and template-only candidates surface as a report; no PR action without explicit promotion.
+
+**Output:**
+
+```
+Template Backflow Analysis — comparing against pod-vault-template @ <short-commit>
+
+🚀 High-confidence backflow candidates (≥2 pods agree, template lacks): N
+- <file>: <section/rule>
+  Source pods: <this vault>, <sibling>
+  PR draft ready — approve to open
+
+🤔 Single-pod candidates (only <this vault> has it): M
+- <file>: <section/rule>
+  Recommendation: validate against ≥1 sibling before backflow
+
+⚠️ Template-only patterns (deprecated or template-ahead): K
+- <file>: <section/rule>
+  Recommendation: review whether to remove from template or backport into pods
+
+Template version: TEMPLATE_VERSION.md @ <short-commit> (last sync <date>)
+```
+
+**Safety rules for Section 10:**
+- Never push directly to template `main` — always PR, always draft.
+- Never include cosmetic-only diffs (project names, paths) in a backflow PR.
+- If `git log` on the template file shows newer activity than the source pod's last change to that file, ask before overwriting — the template may already have a competing improvement.
+- After PR is opened (not merged): append to this vault's `log.md` and to `TEMPLATE_VERSION.md` under "Sync History" — record the PR URL and the candidate's source pods. When the PR merges, the template repo updates its own `TEMPLATE_VERSION.md` (separate concern).
 
 ## Final Report
 
