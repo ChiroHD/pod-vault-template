@@ -33,6 +33,7 @@ If the ambiguity materially changes what gets filed:
 - **An action item has no owner.** Trigger: "we should X" with no name attached.
 - **A status update is ambiguous** ("done" — shipped to prod? to dev? code-complete? validated?). Trigger: vague status word without context.
 - **A new entity is mentioned but unclear if it's already in the vault under another name.** Trigger: "Northern Lakes Chiropractic" — is this Network 812 or a different network? Check before filing.
+- **A file in the destination directory already exists for the same date and project.** Trigger: scanning `projects/<project>/meetings/` (or decisions/, etc.) before filing reveals a same-date file that might be a pre-meeting prep, an earlier session, or a different meeting on the same day. Don't silently create a parallel file. See Step 1c for the merge/create/replace prompt. Origin: 2026-05-20 incident in pod-vault-pj where a prep note and a transcript ingest produced two notes for the same working session.
 - **A wiki page promotion is borderline.** Trigger: a topic surfaced once with minimal context — leave in Candidate Topics, don't create a half-baked page.
 
 **How to phrase the question:** be specific about what's ambiguous (quote the source text), offer the candidate interpretations you considered, ask one focused question at a time.
@@ -116,9 +117,39 @@ If the content is a meeting transcript or raw audio recording transcript, redact
 
 **Important:** The unredacted original stays in the PM's personal vault. Only the redacted version goes into `raw/` in the pod vault.
 
+### Step 1c: Check for an existing file before creating a new one (MANDATORY)
+
+**Why this exists:** before creating a new file in the destination directory, scan for an existing file that represents the same event. Origin: a 2026-05-20 incident in pod-vault-pj where a pre-meeting prep note already existed and a transcript ingest filed a parallel post-meeting note for the same working session — producing two notes for one meeting. The skill should detect and surface that overlap before filing.
+
+**Procedure:**
+
+1. **Compute the candidate destination path** — based on classified type + project. Example: a meeting on YYYY-MM-DD in the `{{PROJECT_SLUG}}` project → `projects/{{PROJECT_SLUG}}/meetings/`.
+2. **Glob the destination directory for same-date files:** `YYYY-MM-DD *.md` matching the content's date.
+3. **For each match, assess overlap:**
+   - **Strong signal — file matches:** same date AND same project AND any of (a) attendees overlap in frontmatter, (b) substantive title-word overlap excluding stop words and date, (c) explicit reference to the same calendar event / Fathom call / Zoom ID, (d) the same source transcript / external link.
+   - **Weak signal — possibly different:** same date but different meeting (e.g., a pod working session + a separate stakeholder 1-on-1 on the same day). Don't merge.
+4. **If a strong-signal match exists, STOP and ASK before filing:**
+   ```
+   Found existing file: <path>
+   It looks like the same event as what you're asking me to ingest because <evidence>.
+   
+   Options:
+     1. Merge — preserve the existing file's content (likely prep / agenda) and add today's recap + decisions + action items into it
+     2. Create a new file alongside — they're actually different events
+     3. Replace — the existing file is obsolete; overwrite with the new content
+   
+   Which?
+   ```
+5. **Special case — pre-meeting prep vs. post-meeting recap.** The most common form of overlap. The existing file usually contains agenda / topics / pre-meeting task lists, while the new content contains decisions / discussion / outcomes. Default merge structure: post-meeting Summary + Decisions + Action Items + Key Discussion Points lead the file; the existing prep + agenda gets preserved as a "Pre-Meeting Prep / Agenda" section at the bottom, with `~~strikethrough~~` markup on any task-list items that the meeting itself superseded.
+6. **If no match exists, proceed to Step 2.**
+
+**What this DOES NOT do:**
+- Doesn't catch every form of overlap (e.g., a meeting filed on Day N about Day N+1 events). The same-date heuristic is the strongest signal; weaker dates are out of scope.
+- Doesn't auto-merge — always asks first. Merge is a content decision; only the user knows whether two notes represent the same event or distinct ones.
+
 ### Step 2: Create the filed version
 
-1. **Name the file:** `YYYY-MM-DD <descriptive title>.md` using today's date or the date found in the content
+1. **Name the file:** `YYYY-MM-DD <descriptive title>.md` using today's date or the date found in the content. If Step 1c surfaced an existing file with a different title (e.g., old pod name vs. new pod name), keep the existing filename when merging unless the user opts otherwise — preserving stable inbound references.
 2. **Add frontmatter:**
 ```yaml
 ---
